@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>QR Code Scanner</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <style>
+        @import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);
+
+        * {
+            font-family: Poppins, Arial
+        }
+
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            background: #000 url(bg.jpg) no-repeat center center;
+            background-size: cover;
+            margin: 0
+        }
+
+        #heading {
+            color: #fff;
+            margin-top: 2em;
+            flex: 100%;
+            text-align: center
+        }
+
+        #container {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.87)
+        }
+
+        #qr-canvas {
+            margin: auto;
+            width: 90%;
+            max-width: 400px
+        }
+
+        #btn-scan-qr {
+            cursor: pointer;
+            padding: .5em .8em;
+            background-color: #00df82;
+            border: none;
+            font-size: 1.2em;
+            border-radius: 1em;
+            color: rgb(3, 0, 187);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h2 id="heading">Align the camera to the QR Code.</h2>
+
+        <button id="btn-scan-qr">Scan QR Code</button>
+
+        <canvas hidden="" id="qr-canvas"></canvas>
+
+    </div>
+
+    <script src="scanner.js"></script>
+
+    <script>
+        var qr5code = window.qrcode, header = document.getElementById("heading"), video = document.createElement("video"), canvasElement = document.getElementById("qr-canvas"), canvas = canvasElement.getContext("2d"), btnScanQR = document.getElementById("btn-scan-qr"); let scanning = !1; function openURL(e) { window.open(e, "_self") } function tick() { canvasElement.height = video.videoHeight, canvasElement.width = video.videoWidth, canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height), scanning && requestAnimationFrame(tick) } function scan() { try { qrcode.decode() } catch (e) { setTimeout(scan, 10) } } header.hidden = !0, qrcode.callback = function (e) { e && (scanning = !1, video.srcObject.getTracks().forEach(e => { e.stop() }), btnScanQR.hidden = !1, canvasElement.hidden = !0, header.hidden = !0, openURL(e)) }, btnScanQR.onclick = function () { navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function (e) { scanning = !0, btnScanQR.hidden = !0, header.hidden = !1, canvasElement.hidden = !1, video.setAttribute("playsinline", !0), video.srcObject = e, video.play(), tick(), scan() }) };
+    </script>
+</body>
+
+</html>

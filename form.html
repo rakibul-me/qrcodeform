@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="form-style.css">
+</head>
+<body>
+    <div class="container">
+        <form method="POST" id="form">
+            <h2>Registration Form</h2>
+            <label for="code" class="full">Code</label>
+            <input type="number" name="code" id="code" required disabled>
+            <label for="name" class="full">Your Name</label>
+            <input type="text" name="name" id="name" placeholder="Enter Full Name" required>
+            <label class="full">Entering or Leaving</label>
+            <input type="radio" name="decision" id="entering" value="entering" checked>
+            <label for="entering" class="small space">Entering</label>
+            <input type="radio" name="decision" id="leaving" value="leaving">
+            <label for="leaving" class="small">Leaving</label>
+            <label for="mobile" class="full">Mobile Number</label>
+            <input type="tel" name="mobile" id="mobile" placeholder="Mobile number" required>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="submitted">
+            <img src="ticked.png" alt="completed">
+            <h3>Your form is Submitted Successfully.</h3>
+        </div>
+    </div>
+
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
+
+    <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyDXy0ti3MpmMYWuQD7pZCqAOy0rJSkZ9pQ",
+        authDomain: "qrcode-form.firebaseapp.com",
+        projectId: "qrcode-form",
+        storageBucket: "qrcode-form.appspot.com",
+        messagingSenderId: "487245417289",
+        appId: "1:487245417289:web:d8ffc3fc14213f1aaa2898"
+    };
+    firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>
+        var url = window.location.href;
+        var code = new URL(url).searchParams.get("code");
+        document.getElementById('code').value = code;
+
+        var form = document.getElementById('form');
+        var formSubmitted = document.getElementById('submitted');
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            async function submit() {
+                var date = new Date();
+                var id = Math.floor(Math.random()*1000000) + 1;
+                var hour = (date.getHours() > 12) ? (date.getHours() - 12).toString() : date.getHours().toString();
+                if(hour == 0) {hour = 12};
+                var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes().toString() : date.getMinutes().toString();
+                var meridian = (date.getHours() > 12) ? "PM" : "AM";
+                var time = hour + ':' + minutes + " " + meridian;
+                firebase.database().ref('users/'+id).set({
+                    code: code,
+                    name: document.getElementById('name').value,
+                    decision: document.getElementById('entering').checked ? 'entering': 'leaving',
+                    mobile: document.getElementById('mobile').value,
+                    date: date.getDate().toString() + '/' + date.getMonth().toString() + "/" + date.getFullYear().toString(),
+                    time: time
+                });
+            }
+            submit().then(
+                (function(){
+                    form.style.left = "-130%";
+                    formSubmitted.style.opacity = 1;
+                    formSubmitted.style.transform = "translate(-50%, -50%)";
+                })()
+            );
+        });
+
+
+        
+    </script>
+</body>
+</html>

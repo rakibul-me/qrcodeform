@@ -1,0 +1,126 @@
+@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);
+
+
+* {
+    font-family: 'Poppins', Arial;
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+    background: black url(bg2.png) no-repeat center center;
+    background-size: cover;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.356);
+}
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: rgb(255, 255, 255);
+    padding: 1em 50px;
+    min-height: 100vh;
+    overflow: hidden;
+}
+@media screen and (min-width: 501px) {
+    .container {
+        border-radius: 1em;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.541);
+        min-height: 80vh;
+    }
+}
+form {
+    position: relative;
+    transition: left 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    z-index: 1;
+}
+form h2 {
+    text-align: center;
+    color: white;
+    background: url(txtbg.png) no-repeat;
+    /* background-size: cover; */
+    background-position: 0% 35%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: animate 2s linear infinite;
+}
+@keyframes animate {
+    0% {
+        background-position: 0% 20%;
+    }
+    50% {
+        background-position: 50% 75%;
+    }
+    100% {
+        background-position: 0% 20%;
+    }
+}
+form input[type='text'], form input[type='number'], form input[type='tel'], form label.full {
+    display: block;
+    width: 100%;
+    margin: 0.5em auto;
+}
+form label {
+    font-size: 1.2em;
+}
+form label.small {
+    font-size: 1em;
+}
+form input {
+    background-color: transparent;
+    border: 1px solid rgb(150, 150, 150);
+    border-radius: 5px;
+    padding: 0.3em;
+    outline-width: 0;
+    font-size: 1em;
+    transition: border 0.2s linear;
+}
+form input:focus {
+    border: 1px solid rgb(143, 0, 172);
+}
+form input:disabled {
+    background-color: rgb(228, 228, 228);
+    cursor: no-drop;
+}
+input[type="submit"] {
+    display: block;
+    background: linear-gradient(120deg, rgba(52, 2, 170, 0.767), rgba(255, 0, 221, 0.712));
+    color: white;
+    border: none;
+    border-radius: 500px;
+    padding: 0.5em 1.5em;
+    margin: auto;
+    margin-top: 2.5em;
+    cursor: pointer;
+}
+input[type="submit"]:hover {
+    background: linear-gradient(120deg, rgb(76, 0, 255), rgb(133, 0, 115));
+}
+input[type="radio"]:checked + .small {
+    color: rgb(38, 161, 0);
+}
+.space {
+    margin-right: 1.5em;
+}
+#submitted {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column wrap;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 20%);
+    opacity: 0;
+    z-index: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+#submitted h3 {
+    text-align: center;
+}
